@@ -1,70 +1,141 @@
-# Getting Started with Create React App
+# useReducer & useContext
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### 참고 : [양반코딩](https://www.youtube.com/watch?v=hLm9J09wiOI)
 
-## Available Scripts
+## Preview
 
-In the project directory, you can run:
+![useReducer useContext](https://user-images.githubusercontent.com/118904460/205240634-bc880171-e1d4-480e-89cc-10dd144dc354.gif)
 
-### `npm start`
+## Code
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### src/reducers/indexReducer.js
+```javascript
+import { createContext } from 'react';
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+export const IndexContext = createContext();
 
-### `npm test`
+export const indexInitialState = {
+  text: '기본값',
+  count: 0,
+};
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+export const indexReducer = (state, action) => {
+  switch (action.type) {
+    case 'changeToKor':
+      return {
+        ...state,
+        text: '안녕하세요',
+      };
+    case 'changeToEng':
+      return {
+        ...state,
+        text: 'Hello',
+      };
+    case 'increaseCount':
+      return {
+        ...state,
+        count: state.count + 1,
+      };
 
-### `npm run build`
+    case 'decreaseCount':
+      return {
+        ...state,
+        count: state.count <= 0 ? 0 : state.count - 1,
+      };
+    default: {
+      return state;
+    }
+  }
+};
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### src/App.jsx
+```javascript
+import { useContext, useReducer } from 'react';
+import {
+  IndexContext,
+  indexInitialState,
+  indexReducer,
+} from './reducers/indexReducer';
+import './App.css';
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+const TextComponent = () => {
+  const [state, dispatch] = useContext(IndexContext);
 
-### `npm run eject`
+  return (
+    <>
+      <h1>text : {state.text}</h1>
+      <div className="btnContainer">
+        <button onClick={() => dispatch({ type: 'changeToKor' })}>한글</button>
+        <button onClick={() => dispatch({ type: 'changeToEng' })}>
+          English
+        </button>
+      </div>
+    </>
+  );
+};
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+const CountComponent = () => {
+  const [state, dispatch] = useContext(IndexContext);
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  return (
+    <>
+      <h1>Count : {state.count}</h1>
+      <div className="btnContainer">
+        <button onClick={() => dispatch({ type: 'decreaseCount' })}>-</button>
+        <button onClick={() => dispatch({ type: 'increaseCount' })}>+</button>
+      </div>
+    </>
+  );
+};
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+function Container() {
+  return (
+    <div className="app">
+      <TextComponent />
+      <CountComponent />
+    </div>
+  );
+}
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+function App() {
+  return (
+    <IndexContext.Provider value={useReducer(indexReducer, indexInitialState)}>
+      <Container />
+    </IndexContext.Provider>
+  );
+}
 
-## Learn More
+export default App;
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### src/App.css
+```css
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
 
-### Code Splitting
+.btnContainer {
+  display: flex;
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+button {
+  padding: 10px 20px;
+  margin: 3px;
+  border: 1px solid rgb(77, 131, 211);
+  background-color: rgb(77, 131, 211);
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  outline: none;
+}
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
