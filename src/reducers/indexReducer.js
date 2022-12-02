@@ -1,3 +1,7 @@
+import { createContext } from 'react';
+
+export const IndexContext = createContext();
+
 export const indexInitialState = {
   text: '기본값',
   count: 0,
