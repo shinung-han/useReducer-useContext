@@ -28,7 +28,7 @@ export const indexReducer = (state, action) => {
     case 'decreaseCount':
       return {
         ...state,
-        count: state.count - 1,
+        count: state.count <= 0 ? 0 : state.count - 1,
       };
     default: {
       return state;

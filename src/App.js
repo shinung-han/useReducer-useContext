@@ -6,12 +6,12 @@ import {
 } from './reducers/indexReducer';
 import './App.css';
 
-const TextButton = () => {
+const TextComponent = () => {
   const [state, dispatch] = useContext(IndexContext);
 
   return (
     <>
-      <div>{state.text}</div>
+      <h1>text : {state.text}</h1>
       <div className="btnContainer">
         <button onClick={() => dispatch({ type: 'changeToKor' })}>한글</button>
         <button onClick={() => dispatch({ type: 'changeToEng' })}>
@@ -22,12 +22,12 @@ const TextButton = () => {
   );
 };
 
-const CountButton = () => {
+const CountComponent = () => {
   const [state, dispatch] = useContext(IndexContext);
 
   return (
     <>
-      <div>{state.count}</div>
+      <h1>Count : {state.count}</h1>
       <div className="btnContainer">
         <button onClick={() => dispatch({ type: 'decreaseCount' })}>-</button>
         <button onClick={() => dispatch({ type: 'increaseCount' })}>+</button>
@@ -39,8 +39,8 @@ const CountButton = () => {
 function Container() {
   return (
     <div className="app">
-      <TextButton />
-      <CountButton />
+      <TextComponent />
+      <CountComponent />
     </div>
   );
 }

@@ -11,3 +11,14 @@
 .btnContainer {
   display: flex;
 }
+
+button {
+  padding: 10px 20px;
+  margin: 3px;
+  border: 1px solid rgb(77, 131, 211);
+  background-color: rgb(77, 131, 211);
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  outline: none;
+}
